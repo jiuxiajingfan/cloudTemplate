@@ -20,6 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.oidc.IdTokenClaimNames;
@@ -188,8 +189,10 @@ public class AuthorizationServerConfig {
     public OAuth2TokenCustomizer<JwtEncodingContext> jwtCustomizer() {
         return context -> {
             JwtClaimsSet.Builder claims = context.getClaims();
+            UserDetails userDetails = userDetailsService.loadUserByUsername(context.getPrincipal().getName());
             if (context.getTokenType().equals(OAuth2TokenType.ACCESS_TOKEN)) {
                 //给 AccessToken 添加签名信息
+                claims.claim("authorities",userDetails.getAuthorities());
                 AccessTokenUtils.signAccessToken(claims, accessTokenRsaPrivateKey);
             } else if (context.getTokenType().getValue().equals(OidcParameterNames.ID_TOKEN)) {
                 // Customize headers/claims for id_token

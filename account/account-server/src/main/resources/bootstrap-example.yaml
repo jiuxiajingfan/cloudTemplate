@@ -15,3 +15,10 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     #自动峰驼
     map-underscore-to-camel-case: true
+
+authorization:
+  rsa:
+#    token私钥
+    private: **
+#    token公钥
+    public: **
