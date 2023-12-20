@@ -38,3 +38,4 @@ build/
 ### Mac OS ###
 .DS_Store
 /authorization/authorization-server/src/main/resources/bootstrap-dev.yaml
+/account/account-server/src/main/resources/bootstrap-dev.yaml

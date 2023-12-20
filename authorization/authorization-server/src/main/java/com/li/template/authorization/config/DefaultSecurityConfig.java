@@ -18,7 +18,7 @@ public class DefaultSecurityConfig {
 
     @Resource
     private AuthorizeService authorizeService;
- 
+
     @Bean
     @Order(2)
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http)
@@ -38,13 +38,13 @@ public class DefaultSecurityConfig {
 //				// authorization server filter chain
                 .formLogin(Customizer.withDefaults())
         ;
- 
+
         return http.build();
     }
- 
+
     @Bean
     public UserDetailsService userDetailsService() {
         return authorizeService;
     }
- 
+
 }
