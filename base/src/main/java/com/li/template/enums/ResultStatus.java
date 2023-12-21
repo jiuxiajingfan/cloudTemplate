@@ -18,9 +18,9 @@ public enum ResultStatus {
 
     FAIL(400, "失败"),
 
-    ACCESS_DENIED(401, "访问受限,您权限不足"),
+    UNAUTHORIZED(401, "请先登录"),
 
-    FORBIDDEN(403, "拒绝访问"),
+    ACCESS_DENIED(403, "访问受限,您权限不足"),
 
     NOT_FOUND(404, "数据不存在"),
 

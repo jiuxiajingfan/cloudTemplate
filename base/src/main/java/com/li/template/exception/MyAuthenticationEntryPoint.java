@@ -1,10 +1,12 @@
 package com.li.template.exception;
 
 import com.li.template.entry.R;
+import com.nimbusds.jose.shaded.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -16,21 +18,23 @@ public class MyAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+        R r = Translator(authException);
+        Gson gson = new Gson();
+        String jsonResult = gson.toJson(r);
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().print(jsonResult);
+    }
 
-        if(authException instanceof InsufficientAuthenticationException){
-            String accept = request.getHeader("accept");
-            if(accept.contains(MediaType.TEXT_HTML_VALUE)){
-                //如果是html请求类型，则返回登录页
-//                LoginUrlAuthenticationEntryPoint loginUrlAuthenticationEntryPoint = new LoginUrlAuthenticationEntryPoint(OAuth2Constant.LOGIN_URL);
-//                loginUrlAuthenticationEntryPoint.commence(request,response,authException);
-            }else {
-                //如果是api请求类型，则返回json
-                R.exceptionResponse(response, "需要带上令牌进行访问");
-            }
-        }else if(authException instanceof MyAuthenticationException){
-            R.exceptionResponse(response, authException.getMessage());
-        }else{
-            R.exception(response,authException);
+    private R Translator(Exception e){
+        if (e instanceof InsufficientAuthenticationException) {
+            return R.error("请先登录！",401);
+        }else if(e instanceof AccessDeniedException){
+            return R.error("权限不足！",403);
+        }else if(e instanceof MyAuthenticationException){
+            return R.error(e.getMessage(),401);
         }
+        return R.error("验证失败！",400);
     }
 }

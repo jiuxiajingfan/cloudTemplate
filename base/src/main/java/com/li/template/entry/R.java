@@ -84,49 +84,4 @@ public class R<T> implements Serializable {
     public static <T> R<T> error(String msg, Integer status) {
         return new R<>(status, null, msg);
     }
-
-
-    /**
-     *
-     * @param response
-     * @param e
-     * @throws IOException
-     * @author  Rommel
-     * @date    2023/7/31-10:45
-     * @version 1.0
-     * @description  异常响应
-     */
-    public static void exception(HttpServletResponse response, Exception e) throws AccessDeniedException, AuthenticationException, IOException {
-
-        String message = null;
-        if(e instanceof OAuth2AuthenticationException o){
-            message = o.getError().getDescription();
-        }else{
-            message = e.getMessage();
-        }
-        exceptionResponse(response,message);
-    }
-
-    /**
-     *
-     * @param response
-     * @param message
-     * @throws AccessDeniedException
-     * @throws AuthenticationException
-     * @throws IOException
-     * @author  Rommel
-     * @date    2023/8/1-16:18
-     * @version 1.0
-     * @description  异常响应
-     */
-    public static void exceptionResponse(HttpServletResponse response,String message) throws AccessDeniedException, AuthenticationException,IOException {
-
-        R responseResult = R.error(message);
-        Gson gson = new Gson();
-        String jsonResult = gson.toJson(responseResult);
-        response.setStatus(HttpServletResponse.SC_OK);
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().print(jsonResult);
-    }
 }

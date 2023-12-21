@@ -70,8 +70,7 @@ public class AccessTokenUtils {
             long exp = Long.parseLong(rdmData[1]);
             long now = Instant.now().getEpochSecond();
             if(exp<now){
-                logger.info("accessToken已过期，exp="+exp);
-                return false;
+                throw new MyAuthenticationException("账户已过期，请重新登录!");
             }
             String signSource = rdmData[0] + RDM_SEP + rdmData[2];
             //验签

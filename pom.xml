@@ -9,8 +9,8 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
-        <module>authorization/authorization-server</module>
-        <module>account/account-server</module>
+        <module>authorization-server</module>
+        <module>account-server</module>
         <module>base</module>
     </modules>
 
