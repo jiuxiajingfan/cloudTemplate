@@ -20,8 +20,6 @@ public class AccountController {
     @GetMapping("/test")
     public String test() {
         SecurityContext context = SecurityContextHolder.getContext();
-        System.out.println(context.getAuthentication());
-        System.out.println(context);
         return "pong!";
     }
 
@@ -29,7 +27,6 @@ public class AccountController {
     @PermitAll
     public String test2() {
         SecurityContext context = SecurityContextHolder.getContext();
-        System.out.println(context);
         return "pong!";
     }
 }

@@ -53,7 +53,7 @@ public class AuthorizationClientConfig {
 								// 鉴权管理器配置
 								.anyRequest().access(webMvcAuthorizationManager())
 				)
-				.exceptionHandling((exceptions) -> exceptions
+				.exceptionHandling(exceptions -> exceptions
 						.authenticationEntryPoint(new MyAuthenticationEntryPoint())
 				);
 		return http.build();
@@ -68,10 +68,7 @@ public class AuthorizationClientConfig {
 		// 获得有 @PermitAll 注解的接口
 		for (Map.Entry<RequestMappingInfo, HandlerMethod> entry : handlerMethodMap.entrySet()) {
 			HandlerMethod handlerMethod = entry.getValue();
-			if (!handlerMethod.hasMethodAnnotation(PermitAll.class)) {
-				continue;
-			}
-			if (null == entry.getKey().getPathPatternsCondition()) {
+			if (!handlerMethod.hasMethodAnnotation(PermitAll.class) || null == entry.getKey().getPathPatternsCondition()) {
 				continue;
 			}
 			Set<String> urls = entry.getKey().getPathPatternsCondition().getPatterns().stream()
@@ -90,6 +87,8 @@ public class AuthorizationClientConfig {
 						break;
 					case DELETE:
 						result.putAll(HttpMethod.DELETE, urls);
+						break;
+					default:
 						break;
 				}
 			});

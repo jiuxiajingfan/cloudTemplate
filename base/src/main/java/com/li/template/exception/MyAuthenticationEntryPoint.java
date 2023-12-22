@@ -2,7 +2,6 @@ package com.li.template.exception;
 
 import com.li.template.entry.R;
 import com.nimbusds.jose.shaded.gson.Gson;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
@@ -10,15 +9,14 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 
 import java.io.IOException;
 
 public class MyAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        R r = Translator(authException);
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
+        R<?> r = translator(authException);
         Gson gson = new Gson();
         String jsonResult = gson.toJson(r);
         response.setStatus(HttpServletResponse.SC_OK);
@@ -27,7 +25,7 @@ public class MyAuthenticationEntryPoint implements AuthenticationEntryPoint {
         response.getWriter().print(jsonResult);
     }
 
-    private R Translator(Exception e){
+    private  R<?> translator(Exception e){
         if (e instanceof InsufficientAuthenticationException) {
             return R.error("请先登录！",401);
         }else if(e instanceof AccessDeniedException){
