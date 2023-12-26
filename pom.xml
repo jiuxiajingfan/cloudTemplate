@@ -12,6 +12,7 @@
         <module>authorization-server</module>
         <module>account-server</module>
         <module>base</module>
+        <module>gateway</module>
     </modules>
 
     <properties>
