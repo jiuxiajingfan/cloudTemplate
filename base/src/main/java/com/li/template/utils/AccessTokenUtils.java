@@ -3,6 +3,8 @@ package com.li.template.utils;
 import cn.hutool.core.codec.Base64Decoder;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONException;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import cn.hutool.jwt.JWT;
 import cn.hutool.jwt.JWTPayload;
 import cn.hutool.jwt.JWTUtil;
@@ -80,7 +82,10 @@ public class AccessTokenUtils {
                 return false;
             }
             JSONArray authorities = (JSONArray) jwtPayload.getClaim("authorities");
-            List<SimpleGrantedAuthority> collect = authorities.stream().map(e -> new SimpleGrantedAuthority(e.toString())).toList();
+            List<SimpleGrantedAuthority> collect = authorities.stream().map(e -> {
+                JSONObject jsonObject = JSONUtil.parseObj(e);
+                return new SimpleGrantedAuthority(jsonObject.get("role").toString());
+            }).toList();
             UsernamePasswordAuthenticationToken authenticated;
             authenticated = UsernamePasswordAuthenticationToken.authenticated(
                     jwtPayload.getClaim("sub"), null, collect);

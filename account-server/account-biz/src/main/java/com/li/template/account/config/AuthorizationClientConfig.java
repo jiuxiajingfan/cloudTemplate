@@ -2,6 +2,7 @@ package com.li.template.account.config;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import com.li.template.config.PermissionConfig;
 import com.li.template.config.WebMvcAuthorizationManager;
 import com.li.template.exception.MyAuthenticationEntryPoint;
 import jakarta.annotation.Resource;
@@ -58,6 +59,12 @@ public class AuthorizationClientConfig {
 				);
 		return http.build();
 	}
+
+	@Bean("ss")
+	PermissionConfig permissionConfig(){
+		return new PermissionConfig();
+	}
+
 
 	private Multimap<HttpMethod, String> getPermitAllUrlsFromAnnotations() {
 		Multimap<HttpMethod, String> result = HashMultimap.create();

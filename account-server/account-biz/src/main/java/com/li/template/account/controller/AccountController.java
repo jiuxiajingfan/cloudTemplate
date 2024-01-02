@@ -1,6 +1,7 @@
 package com.li.template.account.controller;
 
 import jakarta.annotation.security.PermitAll;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/account")
 public class AccountController {
     @GetMapping("/test")
+    @PreAuthorize("@ss.hasPermission('9999','2')")
     public String test() {
         SecurityContext context = SecurityContextHolder.getContext();
         return "pong!";

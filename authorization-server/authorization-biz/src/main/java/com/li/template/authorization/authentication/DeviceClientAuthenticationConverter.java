@@ -20,7 +20,7 @@ import org.springframework.util.StringUtils;
  * @author Steve Riesenberg
  * @since 1.1
  */
-public final class DeviceClientAuthenticationConverter implements AuthenticationConverter {
+public final class  DeviceClientAuthenticationConverter implements AuthenticationConverter {
 	private final RequestMatcher deviceAuthorizationRequestMatcher;
 	private final RequestMatcher deviceAccessTokenRequestMatcher;
 
