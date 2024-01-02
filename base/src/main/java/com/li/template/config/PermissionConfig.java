@@ -30,7 +30,6 @@ public class PermissionConfig {
             SimpleGrantedAuthority o = new SimpleGrantedAuthority(id + role.toString());
             if (authorities.contains(o)) {
                 return true;
-
             }
         }
         log.warn("用户{}正试图访问无权限接口",authentication.getName());
