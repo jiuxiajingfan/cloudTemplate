@@ -35,8 +35,8 @@ public class DefaultSecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
 //                .httpBasic(Customizer.withDefaults())
-				// Form login handles the redirect to the login page from the
-				// authorization server filter chain
+                // Form login handles the redirect to the login page from the
+                // authorization server filter chain
                 .formLogin(Customizer.withDefaults())
         ;
 

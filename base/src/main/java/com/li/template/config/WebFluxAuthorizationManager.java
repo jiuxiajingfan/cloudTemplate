@@ -32,8 +32,8 @@ public class WebFluxAuthorizationManager implements ReactiveAuthorizationManager
             logger.warn("当前请求头Authorization中的值不存在");
             return Mono.just(new AuthorizationDecision(false));
         }
-        boolean verifyResult = AccessTokenUtils.verifyAccessToken(authorizationToken,publicKey);
-        if(!verifyResult){
+        boolean verifyResult = AccessTokenUtils.verifyAccessToken(authorizationToken, publicKey);
+        if (!verifyResult) {
             return Mono.just(new AuthorizationDecision(false));
         }
         return Mono.just(new AuthorizationDecision(true));

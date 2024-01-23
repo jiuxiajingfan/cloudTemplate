@@ -1,11 +1,11 @@
 package com.li.template.authorization.authentication.password;
 
 import com.li.template.authorization.authentication.constant.OAuth2Constant;
+import com.li.template.exception.MyAuthenticationException;
 import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
 import org.springframework.security.web.authentication.AuthenticationConverter;
 import org.springframework.util.LinkedMultiValueMap;
@@ -33,12 +33,12 @@ public class PasswordGrantAuthenticationConverter implements AuthenticationConve
         String username = parameters.getFirst(OAuth2ParameterNames.USERNAME);
         if (!StringUtils.hasText(username) ||
                 parameters.get(OAuth2ParameterNames.USERNAME).size() != 1) {
-            throw new OAuth2AuthenticationException("无效请求，用户名不能为空！");
+            throw new MyAuthenticationException("无效请求，用户名不能为空！");
         }
         String password = parameters.getFirst(OAuth2ParameterNames.PASSWORD);
         if (!StringUtils.hasText(password) ||
                 parameters.get(OAuth2ParameterNames.PASSWORD).size() != 1) {
-            throw new OAuth2AuthenticationException("无效请求，密码不能为空！");
+            throw new MyAuthenticationException("无效请求，密码不能为空！");
         }
 
         //收集要传入PasswordGrantAuthenticationToken构造方法的参数

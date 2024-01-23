@@ -44,25 +44,25 @@ public class PasswordGrantAuthenticationProvider implements AuthenticationProvid
     private final OAuth2TokenGenerator<? extends OAuth2Token> tokenGenerator;
 
     public PasswordGrantAuthenticationProvider(OAuth2AuthorizationService authorizationService,
-                                                 OAuth2TokenGenerator<? extends OAuth2Token> tokenGenerator) {
+                                               OAuth2TokenGenerator<? extends OAuth2Token> tokenGenerator) {
         this.authorizationService = authorizationService;
         this.tokenGenerator = tokenGenerator;
     }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        PasswordGrantAuthenticationToken passwordGrantAuthenticationToken =  (PasswordGrantAuthenticationToken) authentication;
+        PasswordGrantAuthenticationToken passwordGrantAuthenticationToken = (PasswordGrantAuthenticationToken) authentication;
 
         Map<String, Object> additionalParameters = passwordGrantAuthenticationToken.getAdditionalParameters();
         //授权类型
         AuthorizationGrantType authorizationGrantType = passwordGrantAuthenticationToken.getGrantType();
         //用户名
-        String username = (String)additionalParameters.get(OAuth2ParameterNames.USERNAME);
+        String username = (String) additionalParameters.get(OAuth2ParameterNames.USERNAME);
         //密码
-        String password = (String)additionalParameters.get(OAuth2ParameterNames.PASSWORD);
+        String password = (String) additionalParameters.get(OAuth2ParameterNames.PASSWORD);
         //请求参数权限范围
-        String requestScopesStr = (String)additionalParameters.get(OAuth2ParameterNames.SCOPE);
-        if(StringUtil.isNullOrEmpty(requestScopesStr)){
+        String requestScopesStr = (String) additionalParameters.get(OAuth2ParameterNames.SCOPE);
+        if (StringUtil.isNullOrEmpty(requestScopesStr)) {
             throw new MyAuthenticationException("缺少权限参数scope！");
         }
         //请求参数权限范围专场集合
@@ -76,18 +76,18 @@ public class PasswordGrantAuthenticationProvider implements AuthenticationProvid
 
         // Ensure the client is configured to use this authorization grant type
         if (!registeredClient.getAuthorizationGrantTypes().contains(authorizationGrantType)) {
-            throw new OAuth2AuthenticationException(OAuth2ErrorCodes.UNAUTHORIZED_CLIENT);
+            throw new MyAuthenticationException(OAuth2ErrorCodes.UNAUTHORIZED_CLIENT);
         }
 
         //校验用户名信息
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        if(!passwordEncoder.matches(password,userDetails.getPassword())){
-            throw new OAuth2AuthenticationException("密码不正确！");
+        if (!passwordEncoder.matches(password, userDetails.getPassword())) {
+            throw new MyAuthenticationException("密码不正确！");
         }
 
         //由于在上面已验证过用户名、密码，现在构建一个已认证的对象UsernamePasswordAuthenticationToken
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                UsernamePasswordAuthenticationToken.authenticated(userDetails.getUsername(),clientPrincipal,userDetails.getAuthorities());
+                UsernamePasswordAuthenticationToken.authenticated(userDetails.getUsername(), clientPrincipal, userDetails.getAuthorities());
 
         // Initialize the DefaultOAuth2TokenContext
         DefaultOAuth2TokenContext.Builder tokenContextBuilder = DefaultOAuth2TokenContext.builder()
@@ -111,7 +111,7 @@ public class PasswordGrantAuthenticationProvider implements AuthenticationProvid
         if (generatedAccessToken == null) {
             OAuth2Error error = new OAuth2Error(OAuth2ErrorCodes.SERVER_ERROR,
                     "The token generator failed to generate the access token.", ERROR_URI);
-            throw new OAuth2AuthenticationException(error);
+            throw new MyAuthenticationException(error.toString());
         }
 
         OAuth2AccessToken accessToken = new OAuth2AccessToken(OAuth2AccessToken.TokenType.BEARER,
@@ -135,7 +135,7 @@ public class PasswordGrantAuthenticationProvider implements AuthenticationProvid
             if (!(generatedRefreshToken instanceof OAuth2RefreshToken)) {
                 OAuth2Error error = new OAuth2Error(OAuth2ErrorCodes.SERVER_ERROR,
                         "The token generator failed to generate the refresh token.", ERROR_URI);
-                throw new OAuth2AuthenticationException(error);
+                throw new MyAuthenticationException(error.toString());
             }
             refreshToken = (OAuth2RefreshToken) generatedRefreshToken;
             authorizationBuilder.refreshToken(refreshToken);
@@ -145,7 +145,7 @@ public class PasswordGrantAuthenticationProvider implements AuthenticationProvid
         OAuth2Authorization authorization = authorizationBuilder.build();
         this.authorizationService.save(authorization);
 
-        return  new OAuth2AccessTokenAuthenticationToken(
+        return new OAuth2AccessTokenAuthenticationToken(
                 registeredClient, clientPrincipal, accessToken, refreshToken);
     }
 
@@ -162,6 +162,6 @@ public class PasswordGrantAuthenticationProvider implements AuthenticationProvid
         if (clientPrincipal != null && clientPrincipal.isAuthenticated()) {
             return clientPrincipal;
         }
-        throw new OAuth2AuthenticationException(OAuth2ErrorCodes.INVALID_CLIENT);
+        throw new MyAuthenticationException(OAuth2ErrorCodes.INVALID_CLIENT);
     }
 }

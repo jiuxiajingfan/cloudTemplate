@@ -18,7 +18,7 @@ mybatis-plus:
 
 authorization:
   rsa:
-#    token私钥
+    #    token私钥
     private: **
-#    token公钥
+    #    token公钥
     public: **

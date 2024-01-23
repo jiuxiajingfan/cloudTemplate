@@ -4,5 +4,5 @@ spring:
   profiles:
     active: dev
 mybatis-plus:
-    #通用修改处
+  #通用修改处
   mapper-locations: classpath*:com/li/template/account/mapper/xml/*.xml

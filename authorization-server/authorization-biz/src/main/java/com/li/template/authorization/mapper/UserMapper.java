@@ -5,7 +5,7 @@ import com.li.template.authorization.entry.User;
 
 /**
  * <p>
- *  Mapper 接口
+ * Mapper 接口
  * </p>
  *
  * @author lsw

@@ -1,15 +1,8 @@
 package com.li.template.entry;
 
 import com.li.template.enums.ResultStatus;
-import com.nimbusds.jose.shaded.gson.Gson;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.Data;
-import org.springframework.http.MediaType;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 
-import java.io.IOException;
 import java.io.Serializable;
 
 /**

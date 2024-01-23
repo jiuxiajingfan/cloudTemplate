@@ -1,6 +1,7 @@
 package com.li.template.account.controller;
 
-import jakarta.annotation.security.PermitAll;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Version 1.0
  */
 @RestController
+@Tag(name = "你好")
 @RequestMapping("/account")
 public class AccountController {
     @GetMapping("/test")
@@ -26,7 +28,7 @@ public class AccountController {
     }
 
     @GetMapping("/test2")
-    @PermitAll
+    @ApiOperation("nihao")
     public String test2() {
         SecurityContext context = SecurityContextHolder.getContext();
         return "pong!";
